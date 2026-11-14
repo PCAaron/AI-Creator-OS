@@ -9,7 +9,7 @@
 | 环境检查 | **VERIFIED（大部分）** | Node 24.9.0、Python 3.13.16；见 [02-windows-compatibility.md](./02-windows-compatibility.md) |
 | P0-01 开源静态审查 | **VERIFIED** | 见 [01-open-source-audit.md](./01-open-source-audit.md) |
 | P0-02 Autoloop POC | **未开始**（环境已就绪） | 沙盒 `~\.agent-autoloop-phase0`，`doctor` 已跑 |
-| P0-03 Hermes POC | **安装进行中** | `D:\Person\_phase0-hermes-poc`（stable v0.23.1） |
+| P0-03 Hermes POC | **阻塞：安装失败** | PM 拉取 npm/pnpm 失败，需重试 `install.ps1` 同一 `HERMES_HOME` |
 | P0-04 协作 POC | **未开始** | 依赖 P0-02/03 |
 | P0-05 自进化 POC | **未开始** | 见 `poc/phase-0/self-evolution/` |
 | P0-06 安全架构 | **草案** | 见 [07-security-review.md](./07-security-review.md) |

@@ -6,7 +6,7 @@
 | 2026-11-14 | nvm Node 24.9.0 | Win | 通过 | `node -v` |
 | 2026-11-14 | uv Python 3.13.16 | Win | 通过 | `uv python list` |
 | 2026-11-14 | agent-autoloop install + doctor | `AGENT_AUTOLOOP_HOME=~\.agent-autoloop-phase0` | 部分通过（Codex 未登录） | `agent-autoloop doctor` |
-| 2026-11-14 | Hermes install.ps1 | `D:\Person\_phase0-hermes-poc` | **进行中** | 终端日志 |
+| 2026-11-14 | Hermes install.ps1 | `D:\Person\_phase0-hermes-poc` | **失败**（npm/pnpm PM 下载中断；git/ffmpeg/python/node 已就绪） | 终端 721503，exit 1 |
 | — | agent-autoloop `npm test` | — | **未执行** | — |
 | — | hermes `pytest` | — | **未执行** | — |
 | — | content-workbench `pytest` | — | **未执行** | — |

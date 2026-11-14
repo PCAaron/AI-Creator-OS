@@ -20,7 +20,7 @@
 | npm | `Get-Command npm` | 随 Node 22 | — | 存在 |
 | Python | `python3.13 --version` / uv | **3.13.16**（uv 安装，2026-11-14） | workbench **3.13+** | **满足** |
 | uv | `uv --version` | 0.13.1 | workbench 推荐 | 存在 |
-| Hermes CLI | 独立 `HERMES_HOME` | 安装进行中：`D:\Person\_phase0-hermes-poc`（stable **v0.23.1**，`-SkipBrowser`） | POC 需要 | **UNVERIFIED**（安装未结束） |
+| Hermes CLI | 独立 `HERMES_HOME` | `D:\Person\_phase0-hermes-poc`（v0.23.1 已检出） | POC 需要 | **失败**：PM 下载 npm/pnpm 报错 `remote representation changed during download`；`hermes.exe` 未生成 — **可重试安装** |
 | Agent Autoloop | `AGENT_AUTOLOOP_HOME` 沙盒 | **`%USERPROFILE%\.agent-autoloop-phase0`**，`doctor` Node 24.9.0 OK | POC 需要 | **VERIFIED 已安装**（服务已注册） |
 
 ### nvm4w 已安装 Node 版本（`nvm list`）
