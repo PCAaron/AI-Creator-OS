@@ -1,21 +1,42 @@
 # P0-05：自进化能力 POC
 
-**状态：未开始**（依赖 P0-03 Hermes Skill 审批链 + 自研 Evolution Store）
+**状态：MOCK VERIFIED（与 Hermes 解耦，2026-11-14）**
+
+**不得**将确定性 Mock 评测表述为真实用户写作能力已提升。
 
 ## 范围
 
-- 最小 Writer Skill v1.0 + 测试 Fixture（**明确标注非真实用户文风**）
-- 闭环：Feedback → Reflection → Proposal → v1.1 候选 → Evaluation → 审批 → Registry / 回滚
+目录：`poc/phase-0/self-evolution/`
 
-## 进化记录 schema（目标）
+闭环（合成数据）：
 
-见任务书：`skill_id`, `base_version`, `candidate_version`, `evidence_ids`, `proposed_changes`, `evaluation_results`, `approval_status`, `rollback_version`
+1. Writer Skill **v1.0**（`lib/pipeline.mjs`）
+2. AI 初稿 / 人工改稿 / 修改理由（`fixtures/self-evolution-samples.json`）
+3. **Feedback Collector** — 行级 diff
+4. **Reflection** — 带 `evidence_ids` 的规则候选
+5. **Evolution Proposal** — SQLite `evolution_proposals`
+6. **v1.1 Candidate** — `status=candidate`，不覆盖 `active`
+7. **Evaluation** — 留出集 `holdoutGood`；指标 `mock_holdout_match_rate`
+8. **Approval Gate** — `approveProposal` / `rejectProposal`
+9. **Skill Registry** — `skill_versions` 版本化
+10. **Rollback** — `rollbackSkill`
 
-## 评测指标（须独立留出集）
+## 自动测试（`run-poc.mjs`）
 
-- 个人风格一致性、观点可追溯性、事实准确性、结构完整性、人工修改量、渠道格式正确率
-- 禁止仅用 AI 自评通过
+| 场景 | 断言 |
+|------|------|
+| 有效改进 | 批准后 `active`=`1.1-candidate` |
+| 退化拒绝 | 大写候选评测失败 → `rejected` |
+| 未批准不激活 | 仍为 v1.0 |
+| 错误证据 | 批准抛错 |
+| 重复批准 | `duplicate:true` |
+| 回滚 | 恢复 v1.0 |
 
-## 实现目录
+```powershell
+cd D:\Person\AI-Creator-OS\poc\phase-0\self-evolution
+node run-poc.mjs
+```
 
-`poc/phase-0/self-evolution/`（待建）
+## 进化记录 schema
+
+`skill_id`, `base_version`, `candidate_version`, `evidence_ids`, `proposed_changes`, `evaluation_results`, `approval_status`, `rollback_version` — 见 `lib/store.mjs`。

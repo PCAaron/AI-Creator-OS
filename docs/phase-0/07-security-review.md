@@ -26,7 +26,10 @@
 | 场景 | 状态 | 手段 |
 |------|------|------|
 | Agent 访问 POC 外敏感文件 | **MOCK VERIFIED** | `mock-agent.mjs` + `negative-tests.mjs` |
-| 重复事件重复业务结果 | **MOCK VERIFIED** | HTTP duplicate + `business-store` |
+| 重复事件重复业务结果 | **MOCK VERIFIED** | HTTP duplicate + SQLite `business.sqlite` UNIQUE |
+| 路径穿越 / 非法 eventId 文件名 | **MOCK VERIFIED** | `lib/paths.mjs` + `negative-tests.mjs` |
+| 审批拒绝仍创建初稿 | **MOCK VERIFIED** | `mock-agent.mjs` + 集成 |
+| 未批准 Skill 激活（Mock） | **MOCK VERIFIED** | `self-evolution/run-poc.mjs` |
 | 未确认远端副作用 | **MOCK VERIFIED**（选题 POC 无网络） | Mock 不写真实渠道 |
 | 外部热点 Prompt 注入 | **NOT TESTED** | 计划用 `poc/phase-0/fixtures/` |
 | 第三方发言错误归属 | **NOT TESTED** | — |

@@ -1,0 +1,8 @@
+{
+  "name": "@ai-creator-os/phase0-self-evolution",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node run-poc.mjs"
+  }
+}

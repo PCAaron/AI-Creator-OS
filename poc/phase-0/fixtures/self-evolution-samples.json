@@ -1,0 +1,17 @@
+{
+  "feedback": {
+    "aiDraft": "我觉得这个工具不错。\n可以试试看。",
+    "humanEdit": "你觉得这个工具不错。\n可以试试看。\n【Mock CTA】",
+    "reason": "需要第二人称并在结尾加 Mock 行动号召"
+  },
+  "feedbackRegression": {
+    "aiDraft": "简短说明。",
+    "humanEdit": "简短说明。",
+    "reason": "无结构变化"
+  },
+  "holdoutGood": [
+    { "input": "我认为有价值。\n一行。", "expect": ["你", "【Mock CTA】"] },
+    { "input": "我建议先试点。", "expect": ["你", "【Mock CTA】"] },
+    { "input": "我推荐用于内部演示。", "expect": ["你", "【Mock CTA】"] }
+  ]
+}
