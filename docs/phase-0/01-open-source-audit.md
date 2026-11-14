@@ -109,7 +109,7 @@ content-workbench/
 | Commit SHA | `680c80ee0821e6f6dc03b4778b43f8cb5f0463b0` |
 | License | MIT |
 | 技术栈 | Node.js ≥24、TypeScript、`node:sqlite`、事件溯源 |
-| 安装 | `install.ps1` / `install.sh` → `~/.agent-autoloop`（**未执行**） |
+| 安装 | `install.ps1` / `install.sh` → `~/.agent-autoloop`；POC 沙盒 **`~\.agent-autoloop-phase0` 已执行**（2026-11-14） |
 
 ### 核心目录
 
@@ -129,7 +129,8 @@ agent-autoloop/
 | 概念 | 实现要点 |
 |------|----------|
 | **Event** | `protocol/schema.json` `$defs.event`：`id`, `type`, `subject`, `summary`, `detail`, `link`, `hops` |
-| **Rule** | `kernel/rules.ts`：`when` 为 event filter 或 cron；`use` 指定 agent |
+| **Rule** | `kernel/rules.ts`：`when` 为 event filter 或 cron；**`to`** 指定 agents 表中的 Agent |
+| **Agent 插件** | `agents.<id>.use` 指向插件（如 `command`、`claude`），与 Rule 的 `to` 区分 |
 | **Run** | Worker 执行一次 agent turn，带 `session`/`resume` |
 | **Session** | Agent 插件解析 stdout（如 Claude `--session-id` / `--resume`） |
 | **Receipt** | Agent 输出 JSON 块：`ask` / `notice` / `resolve` / `later` / `events` |
@@ -152,7 +153,7 @@ agent-autoloop/
 ### 权限与安全
 
 - `kernel/credentials.ts`、master-key 测试
-- Worker 在规则 `cwd` 沙箱；Windows 测试关注 PowerShell 注入与路径（`tests/windows.test.ts`）
+- Worker 在规则 **`cwd` 下启动进程**（工作目录隔离，**非** OS 级沙箱）；Windows 测试关注 PowerShell 注入与路径（`tests/windows.test.ts`）
 
 ### 测试覆盖
 
@@ -163,7 +164,7 @@ agent-autoloop/
 
 - `install.ps1`：检查 Node major ≥24，克隆 release tag 到 `%USERPROFILE%\.agent-autoloop`
 - `worker/windows.ps1`、`tests/windows-service.test.ts` 等 — **设计上支持 Windows**
-- **本机缺口**：当前 Node **22.14.0**，不满足 engines — **POC 前需 nvm 安装 24+（需你确认）**
+- **本机（2026-11-14）**：nvm 当前 **24.9.0**；沙盒 `agent-autoloop doctor` 通过（Codex 未登录）
 
 ### 复用建议
 
@@ -184,7 +185,7 @@ agent-autoloop/
 | Commit SHA | `4b40ffb0ad6d7da5d3260f5e499e1691508dd4d5` |
 | License | MIT |
 | 技术栈 | Python monorepo：`hermes_cli/`, `gateway/`, `agent/`, `tools/`, `skills/`, `tests/`（体量极大） |
-| CLI | **本机未安装**（`%LOCALAPPDATA%\hermes\bin\hermes.exe` 不存在） |
+| CLI | **PATH 未注册**；独立目录 `D:\Person\_phase0-hermes-poc\hermes-agent\.hermes\bin\hermes.exe` **存在**（v0.23.1）；`install.ps1` 曾在 PM 下载阶段报错 **仍保留失败记录** |
 
 ### 核心目录（顶层）
 

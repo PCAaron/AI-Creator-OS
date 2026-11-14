@@ -1,0 +1,19 @@
+{
+  "agents": {
+    "phase0-mock": {
+      "name": "Phase 0 Mock Agent",
+      "worker": "PLACEHOLDER_WORKER",
+      "use": "command",
+      "command": ["PLACEHOLDER_NODE", "PLACEHOLDER_MOCK_AGENT"]
+    }
+  },
+  "rules": [
+    {
+      "name": "phase0-mock-topic",
+      "when": { "source": "local", "types": ["creator.topic.*"] },
+      "to": "phase0-mock",
+      "cwd": "PLACEHOLDER_WORKSPACE",
+      "prompt": "按 context 中事件类型执行 Phase 0 Mock 场景。禁止访问真实平台；业务副作用只写入 cwd 下 business-store.jsonl。"
+    }
+  ]
+}

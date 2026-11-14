@@ -13,8 +13,14 @@
 - **决策**：业务 Event 仅由 Autoloop 规则触发；Hermes Cron 不参与同一业务
 - **待验证**：P0-04
 
-## ADR-0003：Hermes 安装暂缓
+## ADR-0003：Hermes 安装策略
+
+- **状态**：接受（修订 2026-11-14）
+- **决策**：专用 `HERMES_HOME`=`D:\Person\_phase0-hermes-poc` 已授权安装；**保留** PM 失败事实；定点恢复前须 `-ShowResolvedPaths` / `-Manifest` + 确认无并发安装
+- **原记录**：首轮暂缓全文审查 — 仍适用「全文审查未完成」
+
+## ADR-0004：Rule `to` 与 Agent `use`
 
 - **状态**：接受
-- **决策**：在未完成 `install.ps1` 全文审查与用户授权前，不执行远程安装脚本
 - **日期**：2026-11-14
+- **决策**：Rule 指派字段为 **`to`**（agent id）；`agents.<id>.use` 为插件类型。文档与 POC 规则禁止混用。

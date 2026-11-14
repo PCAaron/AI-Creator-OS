@@ -1,0 +1,10 @@
+{
+  "name": "@ai-creator-os/phase0-autoloop-mock",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:unit": "node negative-tests.mjs",
+    "test:integration": "node run-poc.mjs",
+    "test:integration:slow": "node run-poc.mjs --slow-retry"
+  }
+}

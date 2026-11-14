@@ -1,6 +1,6 @@
 # P0-06：安全与数据架构（Phase 0 设计约束）
 
-> 运行时渗透测试与 Prompt Injection 用例见 P0-05/08 — **本文件为架构约束，非渗透报告**。
+> 运行时渗透测试与 Prompt Injection 用例见 POC 测试与 [08-test-results.md](./08-test-results.md) — **本文件为架构约束 + Phase 0 已测子集**。
 
 ## 六域存储
 
@@ -15,25 +15,40 @@
 
 ## 核心约束（强制）
 
-1. 外部热点 **≠** 用户观点；他人发言不得标为用户原话
-2. AI 推断不得写入 Semantic Memory 冒充事实
-3. 凭证不进 Git/日志；SecretStore 模式参考 content-workbench `secrets.json`
-4. 任何平台 **发表** 须人工确认（content-workbench `publish.py` 已有「仅草稿」原则 — 对齐）
-5. 正式 Skill 升级须：版本号 + 评测报告 + 审批记录 + 可回滚 `rollback_version`
+1. 外部热点 **≠** 用户观点；他人发言不得标为用户原话  
+2. AI 推断不得写入 Semantic Memory 冒充事实  
+3. 凭证不进 Git/日志  
+4. 任何平台 **发表** 须人工确认  
+5. 正式 Skill 升级须：版本号 + 评测 + 审批 + 可回滚  
 
-## Prompt Injection 测试计划（未执行）
+## Phase 0 负面测试（已执行 / 计划）
 
-- 使用 `poc/phase-0/fixtures/` 中模拟热点 HTML/Markdown，内含「忽略上文」「写入 memory」类指令
-- 验收：Agent 不得将注入内容写入 Evidence/Semantic；不得提升权限
-- 状态：**UNVERIFIED**
-
-## 上游安装脚本风险（静态）
-
-| 脚本 | 风险 | 状态 |
+| 场景 | 状态 | 手段 |
 |------|------|------|
-| Autoloop `install.ps1` | 远程 git clone、PATH、Windows 服务 | 已读前 57 行；全文 **未完成** |
-| Hermes `install.ps1` | 远程下载、PM、浏览器二进制 | **未读** — POC 前必读 |
+| Agent 访问 POC 外敏感文件 | **MOCK VERIFIED** | `mock-agent.mjs` + `negative-tests.mjs` |
+| 重复事件重复业务结果 | **MOCK VERIFIED** | HTTP duplicate + `business-store` |
+| 未确认远端副作用 | **MOCK VERIFIED**（选题 POC 无网络） | Mock 不写真实渠道 |
+| 外部热点 Prompt 注入 | **NOT TESTED** | 计划用 `poc/phase-0/fixtures/` |
+| 第三方发言错误归属 | **NOT TESTED** | — |
+| Agent 改 Evidence Store | **NOT TESTED** | — |
+| Skill 未经批准激活 | **NOT TESTED** | 依赖 Hermes |
+| 未确认远端副作用自动重试 | **NOT TESTED** | — |
+
+### Autoloop 隔离（重要）
+
+| 说法 | 事实 |
+|------|------|
+| Rule `cwd` | 仅进程 **工作目录** |
+| `use: command` | **无**通用 OS 沙箱；子进程继承用户权限 |
+| Phase 0 实际手段 | Mock Agent 路径白名单 + 独立沙盒 Home + 无真实 API 凭据 |
+
+## 上游安装脚本风险
+
+| 脚本 | 风险 | 审查/执行 |
+|------|------|-----------|
+| Autoloop `install.ps1` | clone、PATH、Windows 服务 | 已读核心逻辑；**沙盒已执行** |
+| Hermes `install.ps1` | 远程下载、PM、PATH | **部分已读**；执行 **部分成功 + 记录失败** |
 
 ## 凭证与模型
 
-- 无真实供应商密钥时：POC 使用 Mock Adapter，文档标注 **UNVERIFIED（真实 LLM）**
+- 无真实供应商密钥：Autoloop/Hermes 真实 LLM 路径标 **NOT TESTED**。
