@@ -1,0 +1,17 @@
+# Phase-0 audit clones live outside this repo (see docs/phase-0/README.md)
+_phase0-audit-temp/
+
+# Secrets and local runtime (never commit)
+.env
+.env.*
+secrets.json
+**/secrets.json
+*.pem
+*.key
+
+# Python / Node artifacts from future POCs
+.venv/
+__pycache__/
+node_modules/
+dist/
+*.log
