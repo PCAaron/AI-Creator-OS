@@ -1,5 +1,6 @@
 """Local web application, Python 3.10+. Run with python -m creator.server."""
 import argparse
+from contextlib import closing
 import json
 import os
 import sqlite3
@@ -17,13 +18,13 @@ class Store:
     def __init__(self, path):
         self.path = path
         path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(path) as db:
+        with closing(sqlite3.connect(path)) as db, db:
             db.execute(
                 "CREATE TABLE IF NOT EXISTS workspace (id INTEGER PRIMARY KEY CHECK(id=1), revision INTEGER, content TEXT)")
             db.execute("INSERT OR IGNORE INTO workspace VALUES (1,0,?)", (json.dumps(editor.blank()),))
 
     def read(self):
-        with sqlite3.connect(self.path) as db:
+        with closing(sqlite3.connect(self.path)) as db, db:
             rev, raw = db.execute("SELECT revision,content FROM workspace WHERE id=1").fetchone()
         return rev, json.loads(raw)
 
@@ -32,7 +33,7 @@ class Store:
         if revision != current:
             raise Conflict()
         result = editor.apply(state, data)
-        with sqlite3.connect(self.path) as db:
+        with closing(sqlite3.connect(self.path)) as db, db:
             changed = db.execute("UPDATE workspace SET revision=?,content=? WHERE id=1 AND revision=?",
                                  (current+1, json.dumps(state, ensure_ascii=False), current))
             if changed.rowcount != 1:
