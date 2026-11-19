@@ -1,4 +1,5 @@
 import io
+import re
 import os
 import tempfile
 import zipfile
@@ -6,7 +7,7 @@ import subprocess
 import sys
 from contextlib import ExitStack
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import expect, sync_playwright
 with ExitStack() as stack:
     tmp = Path(stack.enter_context(tempfile.TemporaryDirectory()))
     proc = subprocess.Popen([sys.executable, "-u", "-m", "creator.server", "--port", "0",
@@ -24,7 +25,9 @@ with ExitStack() as stack:
     page.on("pageerror", lambda ex: errors.append(str(ex)))
     page.on("dialog", lambda d: d.accept())
     page.goto(url)
-    def click(t): page.get_by_role("button", name=t, exact=True).first.click()
+    def click(t):
+        page.get_by_role("button", name=t, exact=True).first.click()
+        page.locator("#app:not([inert])").wait_for(state="attached")
     def nav(t): page.locator("nav").get_by_role("button", name=t, exact=True).click()
 
     def source(kind, title, body, url=""):
@@ -46,9 +49,9 @@ with ExitStack() as stack:
     for id in page.locator("[data-link]").evaluate_all("(nodes) => nodes.map(n => n.dataset.link)"):
         with page.expect_response(lambda r: r.url.endswith("/api/action") and r.status == 200):
             page.locator('[data-link="'+id+'"]').check()
-        page.wait_for_function("id => document.querySelector('[data-link=\"'+id+'\"]').checked", arg=id)
+        expect(page.locator('[data-link="'+id+'"]')).to_be_checked()
     click("整理素材提纲")
-    page.wait_for_function("document.querySelector('#body').value.includes('待写')")
+    expect(page.locator("#body")).to_have_value(re.compile("待写"))
     page.locator("#body").fill("读者需要知道一项结论适用的条件。示例中，批注记录了出处，也保留了原始说明的限制。")
     page.locator("#reason").fill("补回原始语境")
     click("保存改稿")
